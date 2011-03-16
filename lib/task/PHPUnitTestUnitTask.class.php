@@ -17,7 +17,7 @@
  * @version    SVN: $Id: sfTestUnitTask.class.php 25036 2009-12-07 19:41:58Z Kris.Wallsmith $
  */
 
-class sfPHPUnitTestUnitTask extends sfTestUnitTask
+class PHPUnitTestUnitTask extends BasePHPUnitTestTask
 {
   /**
    * @see sfTask
@@ -30,15 +30,11 @@ class sfPHPUnitTestUnitTask extends sfTestUnitTask
 
     $this->addOptions(array(
       new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file'),
-      new sfCommandOption('coverage-html', null, sfCommandOption::PARAMETER_REQUIRED, 'The folder name for the html coverage'),
-      new sfCommandOption('coverage-clover', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the clover XML log file'),
-      new sfCommandOption('coverage-folder', null, sfCommandOption::PARAMETER_REQUIRED, 'The folder with files to cover'),
     ));
 
-    $this->aliases = array('test-phpunit');
-    $this->namespace = 'test';
-    $this->name = 'phpunit';
-    $this->briefDescription = 'Launches unit tests';
+    $this->aliases = array('phpunit-test-unit');
+    $this->name = 'phpunit-unit';
+    $this->briefDescription = 'Launches unit tests with phpunit';
 
     $this->detailedDescription = <<<EOF
 The [test:unit|INFO] task launches unit tests:
@@ -65,6 +61,8 @@ options:
 
   [./symfony test:unit --xml=log.xml|INFO]
 EOF;
+    
+    parent::configure();
   }
 
   /**
@@ -110,7 +108,7 @@ EOF;
       // filter and register unit tests
       $finder = sfFinder::type('file')->follow_link()->name('*Test.php');
       $h->register($this->filterTestFiles($finder->in($h->base_dir), $arguments, $options));
-
+      
       if(($options['coverage-html'] || $options['coverage-clover']))
       {
         $coverage = new LimeCodeCoverage();
@@ -119,33 +117,7 @@ EOF;
       
       $ret = $h->run($coverage,($options['coverage-html'] || $options['coverage-clover'])) ? 0 : 1;
 
-      //flush junit xml
-      if ($options['xml'])
-      {
-        $this->logSection('junit', 'writing junit data to '.$options['xml']);
-        require_once dirname(__FILE__).'/../test/LimePHPUnit_Util_Log_JUnit.php';
-        $writer = new LimePHPUnit_Util_Log_JUnit($options['xml']);
-        $writer->loadFromLime($h->to_xml());
-        $writer->flush();
-      }
-
-      //flush clover xml
-      if($options['coverage-clover'])
-      {
-        $this->logSection('clover', 'writing clover data to '.$options['coverage-clover']);
-        require_once 'PHP/CodeCoverage/Report/Clover.php';
-        $writer = new PHP_CodeCoverage_Report_Clover();
-        $writer->process($coverage, $options['coverage-clover']);
-      }
-      
-      //flush html
-      if($options['coverage-html'])
-      {
-        $this->logSection('html', 'writing coverage html to '.$options['coverage-html']);
-        require_once 'PHP/CodeCoverage/Report/HTML.php';
-        $writer = new PHP_CodeCoverage_Report_HTML();
-        $writer->process($coverage, $options['coverage-html']);      
-      }
+      $this->flushLogs($options,$coverage,$h);
       
       return $ret;
     }
