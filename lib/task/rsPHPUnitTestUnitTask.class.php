@@ -119,11 +119,17 @@ EOF;
       
       $ret = $h->run($coverage,($options['coverage-html'] || $options['coverage-clover'])) ? 0 : 1;
 
+      //flush junit xml
       if ($options['xml'])
       {
-        file_put_contents($options['xml'], $h->to_xml());
+        $this->logSection('junit', 'writing junit data to '.$options['xml']);
+        require_once dirname(__FILE__).'/../test/LimePHPUnit_Util_Log_JUnit.php';
+        $writer = new LimePHPUnit_Util_Log_JUnit($options['xml']);
+        $writer->loadFromLime($h->to_xml());
+        $writer->flush();
       }
 
+      //flush clover xml
       if($options['coverage-clover'])
       {
         $this->logSection('clover', 'writing clover data to '.$options['coverage-clover']);
@@ -131,9 +137,11 @@ EOF;
         $writer = new PHP_CodeCoverage_Report_Clover();
         $writer->process($coverage, $options['coverage-clover']);
       }
+      
+      //flush html
       if($options['coverage-html'])
       {
-        $this->logSection('clover', 'writing coverage html to '.$options['coverage-html']);
+        $this->logSection('html', 'writing coverage html to '.$options['coverage-html']);
         require_once 'PHP/CodeCoverage/Report/HTML.php';
         $writer = new PHP_CodeCoverage_Report_HTML();
         $writer->process($coverage, $options['coverage-html']);      
