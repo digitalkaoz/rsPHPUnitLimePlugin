@@ -6,9 +6,9 @@ collect coverage data for clover or html from lime tests
 Installation
 ------------
 
-**Git:** [https://github.com/digitalkaoz/rsPHPUnitLimePlugin.git][1]
+**Git:** https://github.com/digitalkaoz/rsPHPUnitLimePlugin.git
 
-**Svn:** [https://svn.github.com/digitalkaoz/rsPHPUnitLimePlugin.git][2]
+**Svn:** https://svn.github.com/digitalkaoz/rsPHPUnitLimePlugin.git
 
 
 Usage
