@@ -32,7 +32,7 @@ class BasePHPUnitTestTask extends sfTestUnitTask
       if($options['coverage-clover'])
       {
         $this->logSection('clover', 'writing clover data to '.$options['coverage-clover']);
-        require_once 'PHP/CodeCoverage/Report/Clover.php';
+        require_once 'PHP/CodeCoverage/Report/Clover.php';        
         $writer = new PHP_CodeCoverage_Report_Clover();
         $writer->process($coverage, $options['coverage-clover']);
       }

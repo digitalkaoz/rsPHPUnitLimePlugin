@@ -43,20 +43,16 @@ class PHPUnitLimeHarness extends sfLimeHarness
 <?php
 function lime_shutdown()
 {
-//  if($should_cover){              
     \$coverage = xdebug_get_code_coverage();
     file_put_contents('$coverage_file', serialize(\$coverage));
     xdebug_stop_code_coverage();
-//  }
               
   file_put_contents('$result_file', serialize(lime_test::to_array()));
 }
               
 register_shutdown_function('lime_shutdown');
               
-//if($should_cover){              
   xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
-//}
               
 include('$file');
 EOF
@@ -70,6 +66,7 @@ EOF
       if($should_cover)
       {
         $covered_files = unserialize(file_get_contents($coverage_file));
+        
         $coverage->append($covered_files,$file);
         unlink($coverage_file);
       }
