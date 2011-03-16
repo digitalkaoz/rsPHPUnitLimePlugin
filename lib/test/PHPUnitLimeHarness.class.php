@@ -66,8 +66,7 @@ EOF
       if($should_cover)
       {
         $covered_files = unserialize(file_get_contents($coverage_file));
-        
-        $coverage->append($covered_files,$file);
+        $coverage->append($covered_files,  str_replace('/', '_', $file));
         unlink($coverage_file);
       }
       

@@ -23,7 +23,9 @@ class PHPUnitTestUnitTask extends BasePHPUnitTestTask
    * @see sfTask
    */
   protected function configure()
-  {
+  {    
+    parent::configure();
+    
     $this->addArguments(array(
       new sfCommandArgument('name', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The test name'),
     ));
@@ -61,8 +63,6 @@ options:
 
   [./symfony test:unit --xml=log.xml|INFO]
 EOF;
-    
-    parent::configure();
   }
 
   /**
