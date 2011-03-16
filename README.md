@@ -27,3 +27,17 @@ Usage
 * symfony test:phpunit-functional --coverage-html=log/coverage-functional frontend
 * symfony test:phpunit-functional --coverage-folder=apps/ frontend
 * symfony test:phpunit-functional --xml=log/junit-functional.xml frontend
+
+**plugin test coverage**
+
+* symfony test:phpunit-plugin --coverage-clover=log/clover-functional.xml sfGuardPlugin
+* symfony test:phpunit-plugin --coverage-html=log/coverage-functional sfGuardPlugin
+* symfony test:phpunit-plugin --coverage-folder=plugin/sfGuardPlugin sfGuardPlugin
+* symfony test:phpunit-plugin --xml=log/junit-functional.xml sfGuardPlugin
+
+**all test coverage**
+
+* symfony test:phpunit-all --coverage-clover=log/clover-functional.xml
+* symfony test:phpunit-all --coverage-html=log/coverage-functional sfGuardPlugin
+* symfony test:phpunit-all --coverage-folder=./
+* symfony test:phpunit-all --xml=log/junit-functional.xml
