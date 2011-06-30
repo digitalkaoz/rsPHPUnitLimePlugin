@@ -81,7 +81,7 @@ EOF;
     $task->setCommandApplication($this->commandApplication);
     $task->run(array(),$options);
 
-    $this->dispatcher->disconnect('task.test.filter_test_files', array($this, 'filterTestFiles'));
+    $this->dispatcher->disconnect('task.test.filter_test_files', array($this, 'filterFiles'));
   }
 
   /**
@@ -92,7 +92,7 @@ EOF;
    * 
    * @return array
    */
-  public function filterTestFiles(sfEvent $event, $files)
+  public function filterFiles(sfEvent $event, $files)
   {
     $filtered = array();
     foreach ($this->plugins as $plugin)
